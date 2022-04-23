@@ -6,12 +6,12 @@ import time
 
 # print(cv2.__version__)
 # Read image
-imgPath = "E:\Images\WALLPAPER\Kousaka_[5120x3200].png"
+imgPath = "E:\\test_[6400x4800].png"
 imgFolderPath = os.path.split(imgPath)[0]
 imgPathSplit = os.path.basename(imgPath).split(".")
 
 img = cv2.imread(imgPath)
-result = cv2.fastNlMeansDenoisingColored(img, None, 7, 7, 7, 21)
+result = cv2.fastNlMeansDenoisingColored(img, None, 3, 3, 7, 21)
 start = time.time()
 
 outputPath = "{2}\{0}_denoise.png".format(
