@@ -72,7 +72,7 @@ parser.add_argument("-jpg", nargs='?', type=int, default=None, const=100,
 
 # args = parser.parse_args("E:\Images\WALLPAPER\Claris HD\\1200_[4800x2700]_denoise.png -webp".split())
 args = parser.parse_args()
-print(args)
+# print(args)
 
 # Read image
 if not os.path.exists(args.path):
