@@ -70,7 +70,8 @@ parser.add_argument("-jpg", nargs='?', type=int, default=None, const=100,
                     help="For JPEG, it can be a quality from 0 to 100 (the higher is the better) [default: 100]")
 
 
-args = parser.parse_args("E:\Images\WALLPAPER\wp8352437_[7680x4320]_denoise].png -webp".split())
+# args = parser.parse_args("E:\Images\WALLPAPER\Claris HD\\1200_[4800x2700]_denoise.png -webp".split())
+args = parser.parse_args()
 print(args)
 
 # Read image
@@ -98,7 +99,7 @@ if args.u:
     print(info, "Rescale Factor \t\t: ", rescale)
 
     # Read model path
-    pathModel = "model/EDSR_x{0}.pb".format(rescale)
+    pathModel = "D:\PROGRAMMING\image-scaling\image-scaling\model\EDSR_x{0}.pb".format(rescale)
     modelName = os.path.split(pathModel)[-1].split("_")[0].lower()
     modelMultiply = os.path.split(pathModel)[-1].split("_")[1][1]
 
@@ -114,7 +115,7 @@ elif args.d:
     print(info, "Denoising params \t: ",args.dh, args.dhc, args.dtw, args.dsw)
     img = cv2.fastNlMeansDenoisingColored(
         img, None, args.dh, args.dhc, args.dtw, args.dsw)
-    outputPath = "{0}_denoise]".format(outputPath)
+    outputPath = "{0}_denoise".format(outputPath)
 
 if args.png:
     print(info,colors.bg.blue,colors.fg.lightgrey, "SAVE AS PNG",colors.reset)
