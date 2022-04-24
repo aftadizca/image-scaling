@@ -92,7 +92,7 @@ ext = args.path.rfind(".")
 outputPath = args.path[:ext]
 
 if args.u:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   UPSCALING IMAGE  ",colors.reset)
+    print(info, colors.bg.blue,colors.fg.lightgrey, "   UPSCALING IMAGE  ",colors.reset)
     # Get rescaling factor
     rescale = args.uf if args.uf else min(round(8000/w), 4)
     print(info, "Rescale Factor \t\t: ", rescale)
@@ -110,24 +110,25 @@ if args.u:
 
     outputPath = "{0}_[{1}x{2}]".format(outputPath, img.shape[1], img.shape[0])
 elif args.d:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   DENOISING IMAGE  ",colors.reset)
+    print(info,colors.bg.blue,colors.fg.lightgrey, "   DENOISING IMAGE  ",colors.reset)
     print(info, "Denoising params \t: ",args.dh, args.dhc, args.dtw, args.dsw)
     img = cv2.fastNlMeansDenoisingColored(
         img, None, args.dh, args.dhc, args.dtw, args.dsw)
     outputPath = "{0}_denoise]".format(outputPath)
 
 if args.png:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   SAVE AS PNG  ",colors.reset)
+    print(info,colors.bg.blue,colors.fg.lightgrey, "SAVE AS PNG",colors.reset)
     cv2.imwrite(outputPath+".png", img,
                 [cv2.IMWRITE_PNG_COMPRESSION, args.png])
 elif args.webp:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   SAVE AS WEBP  ",colors.reset)
+    print(info,colors.bg.blue,colors.fg.lightgrey, "SAVE AS WEBP",colors.reset)
     cv2.imwrite(outputPath+".webp", img, [cv2.IMWRITE_WEBP_QUALITY, args.webp])
+    os.rename(outputPath+".webp", outputPath+".webp.png")
 elif args.jpg:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   SAVE AS JPG  ",colors.reset)
+    print(info,colors.bg.blue,colors.fg.lightgrey, "SAVE AS JPG",colors.reset)
     cv2.imwrite(outputPath+".jpg", img, [cv2.IMWRITE_WEBP_QUALITY, args.jpg])
 else:
-    print("\n",colors.bg.blue,colors.fg.lightgrey, "   SAVE AS PNG  ",colors.reset)
+    print(info,colors.bg.blue,colors.fg.lightgrey, "SAVE AS PNG",colors.reset)
     cv2.imwrite(outputPath+".png", img, [cv2.IMWRITE_PNG_COMPRESSION, 9])
 
 end = time.time()
