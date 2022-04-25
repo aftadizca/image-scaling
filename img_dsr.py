@@ -41,6 +41,7 @@ class colors:
         cyan = '\033[46m'
         lightgrey = '\033[47m'
 
+
 def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
     """Return a sharpened version of the image, using an unsharp mask."""
     # For details on unsharp masking, see:
@@ -56,6 +57,7 @@ def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
         np.copyto(sharpened, image, where=low_contrast_mask)
     return sharpened
 
+
 info = colors.bg.green+colors.bold+" [INFO] "+colors.reset
 middle = colors.bg.blue+colors.fg.lightgrey
 
@@ -66,7 +68,7 @@ parser.add_argument("-u", action='store_true',
 parser.add_argument("-uf", type=int,
                     help="Rescaling factor (max. 4)")
 
-parser.add_argument("-d", type=list,nargs='*', default=None,
+parser.add_argument("-d", action='store_true',
                     help="Do denoising (default: 3 3 7 21)")
 parser.add_argument("-dh", type=int, default=3,
                     help="h params for denoise  (default: 3)")
@@ -94,7 +96,7 @@ args = parser.parse_args()
 
 
 # print(args)
-exit()
+# exit()
 
 # Read image
 if not os.path.exists(args.path):
@@ -115,13 +117,14 @@ ext = args.path.rfind(".")
 outputPath = args.path[:ext]
 
 if args.u:
-    print(info,middle, "UPSCALING IMAGE \t",colors.reset)
+    print(info, middle, "UPSCALING IMAGE \t", colors.reset)
     # Get rescaling factor
     rescale = args.uf if args.uf else min(round(8000/w), 4)
     print(info, "Rescale Factor \t\t: ", rescale)
 
     # Read model path
-    pathModel = "D:\PROGRAMMING\image-scaling\image-scaling\model\EDSR_x{0}.pb".format(rescale)
+    pathModel = "D:\PROGRAMMING\image-scaling\image-scaling\model\EDSR_x{0}.pb".format(
+        rescale)
     modelName = os.path.split(pathModel)[-1].split("_")[0].lower()
     modelMultiply = os.path.split(pathModel)[-1].split("_")[1][1]
 
@@ -134,34 +137,33 @@ if args.u:
     outputPath = "{0}_{1}x{2}".format(outputPath, img.shape[1], img.shape[0])
 
 if args.s:
-    print(info,middle, "SHARPENING IMAGE \t",args.s,colors.reset)
+    print(info, middle, "SHARPENING IMAGE \t", args.s, colors.reset)
     img = unsharp_mask(img, amount=args.s)
     outputPath = "{0}_sharp".format(outputPath)
 
 if args.d:
-    print(info,middle, "DENOISING IMAGE \t",args.dh, args.dhc, args.dtw, args.dsw,colors.reset)
+    print(info, middle, "DENOISING IMAGE \t", args.dh,
+          args.dhc, args.dtw, args.dsw, colors.reset)
     img = cv2.fastNlMeansDenoisingColored(
         img, None, args.dh, args.dhc, args.dtw, args.dsw)
     outputPath = "{0}_denoise".format(outputPath)
 
 if args.png:
-    print(info,middle, "SAVE AS PNG \t",colors.reset)
+    print(info, middle, "SAVE AS PNG \t", colors.reset)
     cv2.imwrite(outputPath+".png", img,
                 [cv2.IMWRITE_PNG_COMPRESSION, args.png])
 elif args.webp:
-    print(info,middle, "SAVE AS WEBP \t",colors.reset)
+    print(info, middle, "SAVE AS WEBP \t", colors.reset)
     cv2.imwrite(outputPath+".webp", img, [cv2.IMWRITE_WEBP_QUALITY, args.webp])
     os.rename(outputPath+".webp", outputPath+".webp.png")
 elif args.jpg:
-    print(info,middle, "SAVE AS JPG \t",colors.reset)
+    print(info, middle, "SAVE AS JPG \t", colors.reset)
     cv2.imwrite(outputPath+".jpg", img, [cv2.IMWRITE_WEBP_QUALITY, args.jpg])
 else:
-    print(info,middle, "SAVE AS PNG \t",colors.reset)
+    print(info, middle, "SAVE AS PNG \t", colors.reset)
     cv2.imwrite(outputPath+".png", img, [cv2.IMWRITE_PNG_COMPRESSION, 9])
 
 end = time.time()
 totalTime = end-start
 print(info, "Done in {0}m {1}s".format(
     int(totalTime//60), int(totalTime % 60)))
-
-
